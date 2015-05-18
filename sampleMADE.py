@@ -8,7 +8,7 @@ import theano.tensor as Te
 
 import utils
 from dataset import Dataset
-from run_made import load_model_params, build_model
+from trainMADE import load_model_params, build_model
 
 import matplotlib.pyplot as plt
 from matplotlib import cm

@@ -30,9 +30,9 @@ python -u trainMADE.py --name mnist_from_paper binarized_mnist 0.01 0 -1 32 Full
 ```
 
 ## Sample
-Generating an X by Y image of MNIST digit samples from a model (assuming the one above).
+Generating an X by Y image of MNIST digit sampled from a model (assuming the one above).
 ```
-python -u sampleMADE.py experiments/mnist_from_paper 10 10 True True 1
+python -u sampleMADE.py experiments/mnist_from_paper/ 10 10 True True 1
 ```
 
 ## Datasets

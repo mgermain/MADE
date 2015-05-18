@@ -6,6 +6,7 @@ import numpy as np
 import theano
 import theano.sandbox.softsign
 from scipy.misc import logsumexp
+from MADE.weights_initializer import WeightsInitializer
 from MADE.made import MADE
 from dataset import Dataset
 import utils
@@ -187,28 +188,27 @@ def parse_args(args):
     group_trainer.add_argument('decrease_constant', type=float, action=GroupedAction, default=argparse.SUPPRESS)
     group_trainer.add_argument('max_epochs', type=lambda x: np.inf if x == "-1" else int(x), help="If -1 will run until convergence.", action=GroupedAction, default=argparse.SUPPRESS)
     group_trainer.add_argument('shuffle_mask', type=int, help="0=None, -1=No cycles.", action=GroupedAction, default=argparse.SUPPRESS)
-    group_trainer.add_argument('shuffling_type', choices=['Once', 'Full', 'Ordering', 'Connectivity'], help="Choosing how the masks will be shuffled.", action=GroupedAction, default=argparse.SUPPRESS)
+    group_trainer.add_argument('shuffling_type', metavar='shuffling_type', choices=['Once', 'Full', 'Ordering', 'Connectivity'], help="Choosing how the masks will be shuffled: {%(choices)s}", action=GroupedAction, default=argparse.SUPPRESS)
     group_trainer.add_argument('nb_shuffle_per_valid', type=int, help="Only considered if shuffle_mask at -1.", action=GroupedAction, default=argparse.SUPPRESS)
     group_trainer.add_argument('batch_size', type=int, help="-1 will set to full batch.", action=GroupedAction, default=argparse.SUPPRESS)
-    group_trainer.add_argument('look_ahead', type=int, action=GroupedAction, default=argparse.SUPPRESS)
-    group_trainer.add_argument('pre_training', type=eval, choices=[False, True], action=GroupedAction, default=argparse.SUPPRESS)
+    group_trainer.add_argument('look_ahead', type=int, help="Number of consecutive epochs without improvements before training stops.", action=GroupedAction, default=argparse.SUPPRESS)
+    group_trainer.add_argument('pre_training', metavar='pre_training', type=eval, choices=[False, True], help="{%(choices)s}", action=GroupedAction, default=argparse.SUPPRESS)
     group_trainer.add_argument('pre_training_max_epoc', type=int, action=GroupedAction, default=argparse.SUPPRESS)
-    group_trainer.add_argument('update_rule', choices=['None', 'adadelta', 'adagrad', 'rmsprop', 'adam', 'adam_paper'], action=GroupedAction, default=argparse.SUPPRESS)
-    group_trainer.add_argument('dropout_rate', type=float, action=GroupedAction, default=argparse.SUPPRESS)
+    group_trainer.add_argument('update_rule', metavar='update_rule', choices=['None', 'adadelta', 'adagrad', 'rmsprop', 'adam', 'adam_paper'], help="{%(choices)s}", action=GroupedAction, default=argparse.SUPPRESS)
+    group_trainer.add_argument('dropout_rate', type=float, help="%% of hidden neuron dropped with dropout.", action=GroupedAction, default=argparse.SUPPRESS)
 
     group_model = parser.add_argument_group('model')
     group_model.add_argument('hidden_sizes', type=eval, help="ex: [500,200]", action=GroupedAction, default=argparse.SUPPRESS)
     group_model.add_argument('random_seed', type=int, action=GroupedAction, default=argparse.SUPPRESS)
-    group_model.add_argument('use_cond_mask', type=eval, choices=[False, True], action=GroupedAction, default=argparse.SUPPRESS)
-    group_model.add_argument('direct_input_connect', choices=["None", "Output", "Full"], action=GroupedAction, default=argparse.SUPPRESS)
-    group_model.add_argument('direct_output_connect', type=eval, choices=[False, True], action=GroupedAction, default=argparse.SUPPRESS)
-    #group_model.add_argument('hidden_activation', type=lambda x: {'name': x, 'function': activation_functions[x]}, action=GroupedAction, default=argparse.SUPPRESS)
-    group_model.add_argument('hidden_activation', choices=activation_functions.keys(), action=GroupedAction, default=argparse.SUPPRESS)
-    group_model.add_argument('weights_initialization', action=GroupedAction, default=argparse.SUPPRESS)
-    group_model.add_argument('mask_distribution', type=float, action=GroupedAction, default=argparse.SUPPRESS)
+    group_model.add_argument('use_cond_mask', metavar='use_cond_mask', type=eval, choices=[False, True], help="{%(choices)s}", action=GroupedAction, default=argparse.SUPPRESS)
+    group_model.add_argument('direct_input_connect', metavar='direct_input_connect', choices=["None", "Output", "Full"], help="{%(choices)s}", action=GroupedAction, default=argparse.SUPPRESS)
+    group_model.add_argument('direct_output_connect', metavar='direct_output_connect', type=eval, choices=[False, True], help="{%(choices)s}", action=GroupedAction, default=argparse.SUPPRESS)
+    group_model.add_argument('hidden_activation', metavar='hidden_activation', choices=activation_functions.keys(), help="{%(choices)s}", action=GroupedAction, default=argparse.SUPPRESS)
+    group_model.add_argument('weights_initialization', metavar='weights_initialization', choices=filter(lambda x: not x.startswith('_'), WeightsInitializer.__dict__), help="{%(choices)s}", action=GroupedAction, default=argparse.SUPPRESS)
+    group_model.add_argument('mask_distribution', type=float, help="Gives some control over which input will have more connections. Ex: -1 will give more importance to the firsts inputs, 1 to the lasts and 0 uniform.", action=GroupedAction, default=argparse.SUPPRESS)
 
-    parser.add_argument("--force", required=False, action='store_true', help="Override the already trained model if it exists insteat of resuming training.")
-    parser.add_argument("--name", required=False, help="Set the name of the expirement insted of hasing it from the arguments.")
+    parser.add_argument("--force", required=False, action='store_true', help="Override instead of resuming training of pre-existing model with same arguments.")
+    parser.add_argument("--name", required=False, help="Set the name of the experiment instead of hashing it from the arguments.")
 
     args = parser.parse_args()
 

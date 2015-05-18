@@ -44,6 +44,9 @@ def get_model(model_path):
     trainingparams = utils.load_dict_from_json_file(os.path.join(model_path, "trainingparams"))
     dataset_name = trainingparams['dataset_name']
 
+    if dataset_name != "binarized_mnist":
+        raise(Exception("Invalid dataset. Only model trained on MNIST supported."))
+
     #
     # LOAD DATASET ####
     dataset = Dataset.get(dataset_name)
@@ -69,19 +72,19 @@ def save_samples(x, y, samples, dataset_name, model_name):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Sample from MADE')
-    parser.add_argument('model_path', help='Path to the model to sample from.')
-    parser.add_argument('nb_samples_per_row', type=int, default=10)
-    parser.add_argument('nb_rows', type=int, default=10)
-    parser.add_argument('find_nearest_neighbour', type=eval, choices=[False, True], default=False)
-    parser.add_argument('change_mask', help="Change mask for every row if generated samples.", type=eval, choices=[False, True])
-    parser.add_argument('nb_run', type=int, default=1)
+    parser = argparse.ArgumentParser(description='Sample from MADE trained on MNIST and generate an image of X by Y samples.')
+    parser.add_argument('model_path', help='Path to the experiment folder of the model to sample from.')
+    parser.add_argument('nb_samples_per_row', help="X: # of samples on each row.", type=int, default=10)
+    parser.add_argument('nb_rows', help="Y: # of rows.", type=int, default=10)
+    parser.add_argument('find_nearest_neighbour', metavar='find_nearest_neighbour', type=eval, choices=[False, True], help="Generate the nearest neighbour (in trainset) image of the samples: {%(choices)s}", default=False)
+    parser.add_argument('change_mask', metavar='change_mask', help="Change mask for every row when generating samples: {%(choices)s}", type=eval, choices=[False, True])
+    parser.add_argument('nb_images', help="# of images to generate.", type=int, default=1)
     args = parser.parse_args()
 
     model, dataset_name, dataset = get_model(args.model_path)
 
-    for run in range(args.nb_run):
-        print "Run {0}".format(run)
+    for run in range(args.nb_images):
+        print "Image {0}".format(run)
         print "### Generating {} samples ...".format(args.nb_samples_per_row * args.nb_rows),
         name = "_samples_run{}".format(run)
 

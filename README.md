@@ -24,7 +24,7 @@ DNA
 python -u trainMADE.py dna 1e-5 0.95 -1 -1 Full 300 100 30 False 0 adadelta 0 [500] 1234 False Output False hinge Orthogonal 0
 ```
 
-MNIST
+MNIST (*Warning: Orthogonal initialization takes a long time and a lot of RAM (4gig) with a model that big.*)
 ```
 python -u trainMADE.py --name mnist_from_paper binarized_mnist 0.01 0 -1 32 Full 300 100 30 False 0 adagrad 0 [8000,8000] 1234 False Output False hinge Orthogonal 0
 ```

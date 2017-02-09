@@ -6,7 +6,7 @@ import os
 import time as t
 import numpy as np
 import theano
-import theano.sandbox.softsign
+from theano.misc import pkl_utils
 from scipy.misc import logsumexp
 from MADE.weights_initializer import WeightsInitializer
 from MADE.made import MADE
@@ -218,15 +218,18 @@ def parse_args(args):
 
 
 def save_model_params(model, model_path):
-    np.savez_compressed(os.path.join(model_path, "params"), model.parameters, model.update_rule.parameters)
+    with open(os.path.join(model_path, "params.zip"), 'w+') as f:
+        pkl_utils.dump((model.parameters, model.update_rule.parameters), f)
 
 
 def load_model_params(model, model_path):
-    saved_parameters = np.load(os.path.join(model_path, "params.npz"))
-    for i, param in enumerate(saved_parameters['arr_0']):
+    with open(os.path.join(model_path, "params.zip"), 'r') as f:
+        saved_parameters = pkl_utils.load(f)
+
+    for i, param in enumerate(saved_parameters[0]):
         model.parameters[i].set_value(param.get_value())
 
-    for i, param in enumerate(saved_parameters['arr_1']):
+    for i, param in enumerate(saved_parameters[1]):
         model.update_rule.parameters[i].set_value(param.get_value())
 
 activation_functions = {
@@ -234,7 +237,7 @@ activation_functions = {
     "hinge": lambda x: theano.tensor.maximum(x, 0.0),
     "softplus": theano.tensor.nnet.softplus,
     "tanh": theano.tensor.tanh,
-    "softsign": theano.sandbox.softsign.softsign
+    "softsign": theano.tensor.nnet.softsign
 }
 
 if __name__ == '__main__':

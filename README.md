@@ -5,9 +5,9 @@ Paper on [arxiv](http://arxiv.org/abs/1502.03509) and at [ICML2015](http://icml.
 
 ## Dependencies:
 - python = 2.7
-- numpy > 1.7
-- scipy > 0.11
-- theano > 0.6
+- numpy >= 1.9.1
+- scipy >= 0.14
+- theano >= 0.9
 
 ## Usage
 See `python trainMADE.py --help`
@@ -50,7 +50,7 @@ External download due to size:
 - [binarized_mnist](https://github.com/mgermain/MADE/releases/download/ICML2015/binarized_mnist.npz)
 
 
-## Troubleshooting 
+## Troubleshooting
 **I got a weird cannot convert int to float error. ``TypeError: Cannot convert Type TensorType(float32, matrix) (of Variable Subtensor{int64:int64:}.0) into Type TensorType(float64, matrix)``**
 
 Have you [configured theano](http://deeplearning.net/software/theano/library/config.html#envvar-THEANORC)?

@@ -1,7 +1,11 @@
 # MADE
 MADE: Masked Autoencoder for Distribution Estimation
 
-Paper on [arxiv](http://arxiv.org/abs/1502.03509) and at [ICML2015](http://icml.cc/2015/?page_id=710).
+Paper on [arXiv](http://arxiv.org/abs/1502.03509) and at [ICML2015](http://icml.cc/2015/?page_id=710).
+
+This repository is for the original [Theano](http://deeplearning.net/software/theano/) implementation.
+
+If you are looking for a PyTorch implementation, thanks to Andrej Karpathy, you can fine one [here](https://github.com/karpathy/pytorch-made).
 
 ## Dependencies:
 - python = 2.7

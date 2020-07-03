@@ -13,6 +13,21 @@ If you are looking for a PyTorch implementation, thanks to Andrej Karpathy, you 
 - scipy >= 0.14
 - theano >= 0.9
 
+## "Easy" environement setup for replication
+Assuming you have a recent [Conda](https://docs.conda.io/en/latest/miniconda.html) installed (tested with 4.8.3) you can easily setup MADE as follows.
+```bash
+conda create -n theano-MADE python=2.7 mkl-service pip git -y
+conda activate theano-MADE
+pip install numpy==1.9.1 scipy==0.14 theano==0.9
+echo -e "[global]\ndevice = gpu\nfloatX = float32\nexception_verbosity=high\n\n[nvcc]\nfastmath = True\n" > ~/.theanorc
+git clone https://github.com/mgermain/MADE
+cd MADE
+wget -P datasets https://github.com/mgermain/MADE/releases/download/ICML2015/rcv1.npz
+wget -P datasets https://github.com/mgermain/MADE/releases/download/ICML2015/binarized_mnist.npz
+```
+Then you can execute any trainMADE commands. See the [Train](#train) section.
+
+
 ## Usage
 See `python trainMADE.py --help`
 
@@ -21,7 +36,7 @@ Experiments are saved in : *`./experiments/{experiment_name}/`*.
 Datasets need to be in : *`./datasets/{dataset_name}.npz`*.
 
 ## Train
-Commands to generate the best result from the paper on multiple dataset.
+Commands to generate the best results from the paper on different datasets.
 
 DNA
 ```
@@ -34,7 +49,7 @@ python -u trainMADE.py --name mnist_from_paper binarized_mnist 0.01 0 -1 32 Full
 ```
 
 ## Sample
-Generating an 10 by 10 MNIST digits image sampled from a trained model(assuming the one above).
+Generating a 10 by 10 MNIST digits image sampled from a trained model(assuming the one above).
 ```
 python -u sampleMADE.py experiments/mnist_from_paper/ 10 10 True True 1
 ```

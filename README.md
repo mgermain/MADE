@@ -38,6 +38,10 @@ Datasets need to be in : *`./datasets/{dataset_name}.npz`*.
 ## Train
 Commands to generate the best results from the paper on different datasets.
 
+ADULT
+```
+python -u trainMADE.py adult 0.01 0 -1 0 ? 300 100 30 False 0 None 0 [500] 1234 False Output False tanh Orthogonal 0
+
 DNA
 ```
 python -u trainMADE.py dna 1e-5 0.95 -1 -1 Full 300 100 30 False 0 adadelta 0 [500] 1234 False Output False hinge Orthogonal 0

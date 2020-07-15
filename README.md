@@ -41,6 +41,7 @@ Commands to generate the best results from the paper on different datasets.
 ADULT
 ```
 python -u trainMADE.py adult 0.01 0 -1 0 ? 300 100 30 False 0 None 0 [500] 1234 False Output False tanh Orthogonal 0
+```
 
 DNA
 ```

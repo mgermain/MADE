@@ -14,7 +14,7 @@ If you are looking for a PyTorch implementation, thanks to Andrej Karpathy, you 
 - theano >= 0.9
 
 ## "Easy" environement setup for replication
-Assuming you have a recent [Conda](https://docs.conda.io/en/latest/miniconda.html) installed (tested with 4.8.3) you can easily setup MADE as follows.
+Assuming you have a recent [Conda](https://docs.conda.io/en/latest/miniconda.html) installed (tested with 4.8.3) and that you are running bash (I havent tried zsh) you can easily setup MADE as follows.
 ```bash
 conda create -n theano-MADE python=2.7 mkl-service pip git -y
 conda activate theano-MADE
